@@ -11,6 +11,9 @@ import {
 import { Image } from 'react-native-elements';
 import { BlurView } from '@react-native-community/blur';
 import CarrouselMovies from './components/CarrouselMovies';
+import { useColorScheme } from 'react-native';
+import { getThemeStyles } from './styles';
+
 
 const DATA = ['All','Romance','Kids','Sport','Horror'];
 
@@ -29,6 +32,7 @@ const HomeScreen = () => {
   const [moviesRated, setMoviesRated] = useState([]);
   const [moviesupcoming, setMoviesUpcoming] = useState([]);
 
+  // Fetch movies from API and options
   const options = {
       method: 'GET',
       headers: {
@@ -59,6 +63,7 @@ const HomeScreen = () => {
   }
   , []);
 
+  // Item navigation
   const Item = ({title}: ItemProps) => (
     <TouchableOpacity 
       style={[
@@ -74,11 +79,14 @@ const HomeScreen = () => {
     </TouchableOpacity>
   );
 
+  const isDarkMode = useColorScheme() === 'dark';
+  const stylesTheme = getThemeStyles(isDarkMode);
+  
   return (
-    <SafeAreaView style={styles.page}>
+    <SafeAreaView style={[styles.page]}>
       <ScrollView> 
 
-        <View style={styles.container}>
+        <View style={[styles.container , stylesTheme.backgroundColor]}>
           <Image source={images[0]} style={[styles.cover]} />
 
           <View style={[styles.navBar, styles.absolute]} >
@@ -96,10 +104,10 @@ const HomeScreen = () => {
             </BlurView>
           </View>
 
-          <View style={[styles.containerBottom, styles.absolute, {bottom: 0 }]}>
+          <View style={[styles.containerBottom, stylesTheme.backgroundColor, styles.absolute, {bottom: 0 }]}>
             <View style={styles.containerBottomItem}>
-              <Text style={styles.title}>My List</Text>
-              <Text style={styles.title}>Discover</Text>
+              <Text style={[styles.title, stylesTheme.textColor]}>My List</Text>
+              <Text style={[styles.title, stylesTheme.textColor]}>Discover</Text>
             </View>
 
             <View style={[styles.containerBottomItem]}>
@@ -132,8 +140,6 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   page:{
-    backgroundColor: 'black',
-    // height: '100%',
     width: '100%',
     flex: 1,
   },
@@ -188,11 +194,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: 'black',
   },
   containerBottomItem: {
     width: '100%',
-    // height: '50%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',

@@ -7,6 +7,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Image } from 'react-native-elements';
+import { useColorScheme } from 'react-native';
+import { getThemeStyles } from '../styles';
+
 interface CarrouselMovieProps {
     props: any;
     title: string;
@@ -18,11 +21,14 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
     else if (props["props"]){
         props = props["props"];
     }
+
+    const isDarkMode = useColorScheme() === 'dark';
+    const stylesTheme = getThemeStyles(isDarkMode);
     
     return(
         <View style={styles.container}>
             <View style={{display:'flex', flexDirection:'row', justifyContent: 'space-between'}}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={[styles.title, stylesTheme.textColor]}>{title}</Text>
                 <TouchableOpacity>
                     <Text style={styles.link}>
                         See more    
@@ -40,7 +46,7 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
                                 style={styles.image}
                             />
                         </View>
-                        <Text style={styles.titleMovie}>{item.original_title}</Text>
+                        <Text style={[styles.titleMovie, stylesTheme.textColor]}>{item.original_title}</Text>
                     </View>
                 )}
                 keyExtractor={item => item.id}
@@ -73,20 +79,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     title: {
-        // width: '100%',
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'white',
         marginBottom: 15,
     },
     titleMovie: {
         width: '100%',
         fontSize: 12,
         fontWeight: 'bold',
-        color: 'white',
     },
     link: {
-        color: 'yellow',
+        color: '#F2C94C',
         fontSize: 16,
         fontWeight: 'bold',
     },

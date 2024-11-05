@@ -1,5 +1,8 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# Awesome Project
+Ceci est un projet d'école utilisant ReactNative en s'appuyant sur ce figma [Movie App mobile](https://www.figma.com/design/RiUFzeuRuGTthn9ptxlXXJ/Movies-mobile-app-home---Light-%26-Dark-(Community)?node-id=201-107&node-type=canvas&t=fu4VidutySngaCNw-0) sur mon année de Master 2 développeur fullstack.
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.

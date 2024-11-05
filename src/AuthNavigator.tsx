@@ -4,22 +4,12 @@ import { useAuth } from '../providers/Context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
     Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
     useColorScheme,
-    View,
-    Button,
 } from 'react-native';
+import { getThemeStyles } from './styles.tsx';
+
 // Icons
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faBookBookmark, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -35,12 +25,9 @@ const Tab = createBottomTabNavigator();
 
 const AuthNavigator: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  
-//   const isDarkMode = useColorScheme() === 'dark';
 
-//   const backgroundStyle = {
-//     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-//   };
+  const isDarkMode = useColorScheme() === 'dark';
+  const styles = getThemeStyles(isDarkMode);
 
   return (
     <Tab.Navigator
@@ -61,11 +48,12 @@ const AuthNavigator: React.FC = () => {
 
                 return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: '#F2C94C',
-            tabBarInactiveTintColor: 'white',
-            tabBarActiveBackgroundColor: 'black',
-            tabBarInactiveBackgroundColor: 'black',
+            tabBarActiveTintColor: styles.tabBarActiveTintColor.color,
+            tabBarInactiveTintColor: styles.tabBarActiveTintColor.color,
+            tabBarActiveBackgroundColor: styles.tabBarActiveBackgroundColor.color,
+            tabBarInactiveBackgroundColor: styles.tabBarInactiveBackgroundColor.color,
         })}>
+            
         {!isAuthenticated ? (
                 <>
                     <Tab.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
