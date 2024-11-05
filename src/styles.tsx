@@ -1,3 +1,4 @@
+import { text } from '@fortawesome/fontawesome-svg-core';
 import { StyleSheet } from 'react-native';
 
 const lightTheme = StyleSheet.create({
@@ -19,7 +20,24 @@ const lightTheme = StyleSheet.create({
   textColor: {
     color: '#333333'
   },
+  textButtonColor: {
+    color: 'white',
+  },
+  gradientColor:{
+    color: 'white' as 'white',
+  }
 });
+const gradientColorLigth = {
+  gradientColor: 'rgba(255, 255, 255, 1)',
+};
+ 
+const gradientColorDark = {
+  gradientColor: 'rgba(0, 0, 0, 1)',
+};
+
+export const gradientColor = (isDarkMode: boolean) => {
+  return isDarkMode ? gradientColorDark : gradientColorLigth;
+}
 
 const darkTheme = StyleSheet.create({
   tabBarActiveTintColor: {
@@ -35,13 +53,52 @@ const darkTheme = StyleSheet.create({
     color: 'black'
   },
   backgroundColor: {
-    backgroundColor: '#121212'
+    backgroundColor: 'black'
   },
   textColor: {
-    color: 'white'
+    color: 'white',
   },
+  textButtonColor: {
+    color: '#333333',
+  },
+  gradientColor:{
+    color: 'black',
+  }
 });
+
+const theme = {
+  section : {
+    marginVertical: 20,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold' as 'bold',
+  },
+  button:{
+      borderRadius:10,
+      paddingVertical:10,
+      justifyContent: 'center' as 'center',
+      alignItems: 'center' as 'center',
+  },
+  buttonYellow: {
+      backgroundColor:'#F2C94C',
+  },
+  buttonGrey: {
+      backgroundColor:'#7D8790',
+  },
+  textButton:{
+    fontWeight: 'bold' as 'bold',
+    fontSize: 16,
+  },
+  imagePub:{
+      height: 150,
+  }
+};
 
 export const getThemeStyles = (isDarkMode: boolean) => {
   return isDarkMode ? darkTheme : lightTheme;
 };
+
+export const getStyles = () => {
+    return theme;
+}

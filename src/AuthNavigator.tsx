@@ -1,10 +1,6 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from '../providers/Context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {
-    Colors,
-} from 'react-native/Libraries/NewAppScreen';
 import {
     useColorScheme,
 } from 'react-native';
@@ -49,7 +45,7 @@ const AuthNavigator: React.FC = () => {
                 return <FontAwesomeIcon icon={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: styles.tabBarActiveTintColor.color,
-            tabBarInactiveTintColor: styles.tabBarActiveTintColor.color,
+            tabBarInactiveTintColor: styles.tabBarInactiveTintColor.color,
             tabBarActiveBackgroundColor: styles.tabBarActiveBackgroundColor.color,
             tabBarInactiveBackgroundColor: styles.tabBarInactiveBackgroundColor.color,
         })}>

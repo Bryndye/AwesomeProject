@@ -10,9 +10,13 @@ import {
 } from 'react-native';
 import { Image } from 'react-native-elements';
 import { BlurView } from '@react-native-community/blur';
+import LinearGradient from 'react-native-linear-gradient';
+
 import CarrouselMovies from './components/CarrouselMovies';
+import Pub from './components/Pub';
+
 import { useColorScheme } from 'react-native';
-import { getThemeStyles } from './styles';
+import { getThemeStyles, getStyles, gradientColor } from './styles';
 
 
 const DATA = ['All','Romance','Kids','Sport','Horror'];
@@ -81,6 +85,8 @@ const HomeScreen = () => {
 
   const isDarkMode = useColorScheme() === 'dark';
   const stylesTheme = getThemeStyles(isDarkMode);
+  const styles_ = getStyles();
+  const gradient = gradientColor(isDarkMode);
   
   return (
     <SafeAreaView style={[styles.page]}>
@@ -104,34 +110,37 @@ const HomeScreen = () => {
             </BlurView>
           </View>
 
-          <View style={[styles.containerBottom, stylesTheme.backgroundColor, styles.absolute, {bottom: 0 }]}>
+          <LinearGradient
+            colors={[gradient.gradientColor, 'rgba(255, 255, 255, 0)']}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 0, y: 0 }}
+            style={[styles.containerBottom, styles.absolute, {bottom: 0 }]}
+          />
+
+          <View style={[styles.containerBottom, styles.absolute, {bottom: 0 }]}>
             <View style={styles.containerBottomItem}>
-              <Text style={[styles.title, stylesTheme.textColor]}>My List</Text>
-              <Text style={[styles.title, stylesTheme.textColor]}>Discover</Text>
+              <Text style={[styles_.title, stylesTheme.textColor]}>My List</Text>
+              <Text style={[styles_.title, stylesTheme.textColor]}>Discover</Text>
             </View>
 
             <View style={[styles.containerBottomItem]}>
-                <TouchableOpacity style={{width:'40%', paddingVertical:10, backgroundColor:'#7D8790', borderRadius:10}}>
-                  <Text style={[styles.title, styles.containerBottomItemText]}>+ Whishlist</Text>
+                <TouchableOpacity style={[styles.buttonCover, styles_.button, styles_.buttonGrey]}>
+                  <Text style={[styles_.textButton, {color: 'white'}]}>+ Whishlist</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{width:'40%', paddingVertical:10, backgroundColor:'#F2C94C', borderRadius:10}}>
-                  <Text style={[styles.title, styles.containerBottomItemText]}>Details</Text>
+                <TouchableOpacity style={[styles.buttonCover, styles_.button, styles_.buttonYellow]}>
+                  <Text style={[styles_.textButton, stylesTheme.textButtonColor]}>Details</Text>
                 </TouchableOpacity>
             </View>
           </View>
         </View>
 
+        <View style={[styles.content, stylesTheme.backgroundColor]}>
+          <CarrouselMovies props={moviesPopular} title='Popular'/>
+          <CarrouselMovies props={moviesRated} title='Top Rated'/>     
+          <CarrouselMovies props={moviesupcoming} title='Upcoming'/>
 
-        <CarrouselMovies props={moviesPopular} title='Popular'/>
-
-        <CarrouselMovies props={moviesRated} title='Top Rated'/>
-        
-        <CarrouselMovies props={moviesupcoming} title='Upcoming'/>
-
-        {/* Bloc promo */}
-        {/* <View>
-          
-          </View> */}
+          <Pub />
+        </View>
 
         </ScrollView>
       </SafeAreaView>
@@ -142,6 +151,11 @@ const styles = StyleSheet.create({
   page:{
     width: '100%',
     flex: 1,
+  },
+  content : {
+    flex: 1,
+    paddingHorizontal: 30,
+    // paddingLeft: 30,
   },
   container: {
     width: '100%',
@@ -203,9 +217,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
-  containerBottomItemText: {
-    alignSelf: 'center',
-  },
+  buttonCover:{
+    width: 150,
+    height: 50,
+  }
 });
 
 export default HomeScreen;

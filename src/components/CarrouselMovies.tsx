@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Image } from 'react-native-elements';
 import { useColorScheme } from 'react-native';
-import { getThemeStyles } from '../styles';
+import { getThemeStyles, getStyles } from '../styles';
 
 interface CarrouselMovieProps {
     props: any;
@@ -24,9 +24,10 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
 
     const isDarkMode = useColorScheme() === 'dark';
     const stylesTheme = getThemeStyles(isDarkMode);
+    const styles_ = getStyles();
     
     return(
-        <View style={styles.container}>
+        <View style={[styles.container, styles_.section]}>
             <View style={{display:'flex', flexDirection:'row', justifyContent: 'space-between'}}>
                 <Text style={[styles.title, stylesTheme.textColor]}>{title}</Text>
                 <TouchableOpacity>
@@ -61,8 +62,6 @@ const styles = StyleSheet.create({
     container: {
         height: 250,
         width: '100%',
-        paddingHorizontal: 30,
-        paddingVertical: 10,
     },
     item: {
         display: 'flex',
