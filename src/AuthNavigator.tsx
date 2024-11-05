@@ -16,8 +16,20 @@ import HomeScreen from './Home';
 import SearchScreen from './Search';
 import WhishlistScreen from './Whishlist';
 import ProfileScreen from './Profile';
+import MovieDetails from './components/MovieDetails';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function StackNavigator() {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="MovieDetails" component={MovieDetails} />
+        </Stack.Navigator>
+    );
+}
 
 const AuthNavigator: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -48,19 +60,22 @@ const AuthNavigator: React.FC = () => {
             tabBarInactiveTintColor: styles.tabBarInactiveTintColor.color,
             tabBarActiveBackgroundColor: styles.tabBarActiveBackgroundColor.color,
             tabBarInactiveBackgroundColor: styles.tabBarInactiveBackgroundColor.color,
+
+            headerShown: false,
         })}>
             
-        {!isAuthenticated ? (
+        {isAuthenticated ? 
+            (
                 <>
-                    <Tab.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+                    <Tab.Screen name="Home" component={StackNavigator} />
+                    <Tab.Screen name="Search" component={SearchScreen} />
+                    <Tab.Screen name="Whislist" component={WhishlistScreen} />
+                    <Tab.Screen name="Profile" component={ProfileScreen} />
                 </>
             ):
             (
                 <>
-                    <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
-                    <Tab.Screen name="Search" component={SearchScreen} />
-                    <Tab.Screen name="Whislist" component={WhishlistScreen} />
-                    <Tab.Screen name="Profile" component={ProfileScreen} />
+                    <Tab.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
                 </>
             )
             }

@@ -111,7 +111,7 @@ const HomeScreen = () => {
           </View>
 
           <LinearGradient
-            colors={[gradient.gradientColor, 'rgba(255, 255, 255, 0)']}
+            colors={[gradient.gradientColor, gradient.gradientColor2]}
             start={{ x: 0, y: 1 }}
             end={{ x: 0, y: 0 }}
             style={[styles.containerBottom, styles.absolute, {bottom: 0 }]}

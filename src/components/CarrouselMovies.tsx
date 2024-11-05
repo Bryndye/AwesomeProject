@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Image } from 'react-native-elements';
 import { useColorScheme } from 'react-native';
 import { getThemeStyles, getStyles } from '../styles';
@@ -25,6 +26,7 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const stylesTheme = getThemeStyles(isDarkMode);
     const styles_ = getStyles();
+    const navigation = useNavigation<any>();
     
     return(
         <View style={[styles.container, styles_.section]}>
@@ -40,15 +42,18 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
             <FlatList
                 data={props}
                 renderItem={({item}) => (
-                    <View style={styles.item}>
-                        <View style={{height:'80%'}}>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => navigation.navigate('Home', { screen:'MovieDetails', params: {item : item} })}
+                    >
+                        <View style={{ height: '80%' }}>
                             <Image
                                 source={{ uri: `https://image.tmdb.org/t/p/w400/${item.poster_path}` }}
                                 style={styles.image}
                             />
                         </View>
                         <Text style={[styles.titleMovie, stylesTheme.textColor]}>{item.original_title}</Text>
-                    </View>
+                    </TouchableOpacity>
                 )}
                 keyExtractor={item => item.id}
                 horizontal

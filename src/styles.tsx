@@ -29,10 +29,12 @@ const lightTheme = StyleSheet.create({
 });
 const gradientColorLigth = {
   gradientColor: 'rgba(255, 255, 255, 1)',
+  gradientColor2: 'rgba(255, 255, 255, 0)',
 };
  
 const gradientColorDark = {
   gradientColor: 'rgba(0, 0, 0, 1)',
+  gradientColor2: 'rgba(0, 0, 0, 0)',
 };
 
 export const gradientColor = (isDarkMode: boolean) => {
