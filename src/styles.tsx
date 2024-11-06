@@ -72,6 +72,11 @@ const theme = {
   section : {
     marginVertical: 20,
   },
+  container:{
+    flex : 1,
+    // justifyContent: 'center' as 'center',
+    alignItems: 'center' as 'center',
+  },
   title: {
     fontSize: 16,
     fontWeight: 'bold' as 'bold',
@@ -83,7 +88,7 @@ const theme = {
       alignItems: 'center' as 'center',
   },
   buttonYellow: {
-      backgroundColor:'#F2C94C',
+      backgroundColor:'#F2C94C' as '#F2C94C',
   },
   buttonGrey: {
       backgroundColor:'#7D8790',
@@ -94,7 +99,27 @@ const theme = {
   },
   imagePub:{
       height: 150,
-  }
+  },
+  imageMovie: {
+    minWidth: 100,
+    width: '100%' as '100%',
+    height: '100%'  as '100%',
+    borderRadius: 10,
+  },
+  maj:{
+    textTransform: 'uppercase' as 'uppercase',
+  },
+  voteSection:{
+    width: '100%' as '100%',
+    display: 'flex' as 'flex',
+    flexDirection: 'row' as 'row',
+    justifyContent: 'space-around' as 'space-around',
+  },
+  badgeLanguage:{
+    backgroundColor: '#F2C94C',
+    borderRadius: 10,
+    padding: 5,
+  },
 };
 
 export const getThemeStyles = (isDarkMode: boolean) => {

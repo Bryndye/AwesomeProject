@@ -2,30 +2,36 @@ import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Input } from 'react-native-elements';
 import { useAuth } from "../providers/Context";
+import { useColorScheme } from 'react-native';
+import { getThemeStyles, getStyles } from './styles';
 
 
 const LoginScreen = () => {
     const { login } = useAuth();
 
+    const isDarkMode = useColorScheme() === 'dark';
+    const styles_ = getStyles();
+    const themeStyles = getThemeStyles(isDarkMode);
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, themeStyles.backgroundColor]}>
             <Input
                 placeholder='Email'
                 leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-                style={styles.input}
+                style={[styles.input, themeStyles.textColor]}
             />
             <Input
                 placeholder='Password'
                 leftIcon={{ type: 'font-awesome', name: 'lock' }}
-                style={styles.input}
+                style={[styles.input, themeStyles.textColor]}
             />
-            <Text>pas nécessaire de remplir les inputs !</Text>
+            <Text style={themeStyles.textColor}>pas nécessaire de remplir les inputs !</Text>
             <TouchableOpacity style={styles.button} onPress={login}>
-                <Text style={styles.textButton}>Login</Text>
+                <Text style={[styles_.textButton, themeStyles.textButtonColor]}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity>
-                <Text style={styles.textButton}>Register</Text>
+                <Text style={[styles_.textButton, themeStyles.textColor]}>Register</Text>
             </TouchableOpacity>
         </View>
     );
@@ -54,9 +60,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginBottom: 10,
-    },
-    textButton: {
-        color: '#fff',
     },
     social: {
         flexDirection: 'row',

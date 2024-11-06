@@ -49,7 +49,7 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
                         <View style={{ height: '80%' }}>
                             <Image
                                 source={{ uri: `https://image.tmdb.org/t/p/w400/${item.poster_path}` }}
-                                style={styles.image}
+                                style={styles_.imageMovie}
                             />
                         </View>
                         <Text style={[styles.titleMovie, stylesTheme.textColor]}>{item.original_title}</Text>
@@ -75,12 +75,6 @@ const styles = StyleSheet.create({
         gap: 10,
         marginRight: 10,
         width: 100,
-    },
-    image: {
-        minWidth: 100,
-        width: '100%',
-        height: '100%',
-        borderRadius: 10,
     },
     title: {
         fontSize: 18,
