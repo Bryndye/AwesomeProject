@@ -44,7 +44,8 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
                 renderItem={({item}) => (
                     <TouchableOpacity
                         style={styles.item}
-                        onPress={() => navigation.navigate('Home', { screen:'MovieDetails', params: {item : item} })}
+                        onPress={() => navigation.navigate('MovieDetails', { item: item })}
+                        // onPress={() => navigation.navigate('Home', { screen:'MovieDetails', params: {item : item} })}
                     >
                         <View style={{ height: '80%' }}>
                             <Image

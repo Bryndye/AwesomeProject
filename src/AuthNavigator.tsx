@@ -31,6 +31,15 @@ function StackNavigator() {
     );
 }
 
+function StackNavigatorSearch() {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="MovieDetails" component={MovieDetails} />
+        </Stack.Navigator>
+    );
+}
+
 const AuthNavigator: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
@@ -68,7 +77,7 @@ const AuthNavigator: React.FC = () => {
             (
                 <>
                     <Tab.Screen name="Home" component={StackNavigator} />
-                    <Tab.Screen name="Search" component={SearchScreen} />
+                    <Tab.Screen name="Search" component={StackNavigatorSearch} />
                     <Tab.Screen name="Whislist" component={WhishlistScreen} />
                     <Tab.Screen name="Profile" component={ProfileScreen} />
                 </>
