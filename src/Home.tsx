@@ -118,6 +118,7 @@ const HomeScreen = () => {
         setGenres(res.genres);
       })
       .catch(err => console.error(err));
+      setCategory(-1);
   }
   , []);
 
