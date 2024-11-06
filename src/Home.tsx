@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-import { Image } from 'react-native-elements';
+import { Icon, Image } from 'react-native-elements';
 import { BlurView } from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -20,13 +20,25 @@ import { getThemeStyles, getStyles, gradientColor } from './styles';
 
 const HomeScreen = () => {
   const [category, setCategory] = useState(-1);
+
+  const [selectedMovie, setSelectedMovie] = useState<{ id: number; original_title: string; poster_path: string } | null>(null);
+  const [initialMovies, setInitialMovies] = useState<{id: number; original_title: string; poster_path: string}[]>([]);
+  const [indexCarrousel, setIndexCarrousel] = useState(0);
+  const setIndexCarrouselLimit = (index: number) => {
+    if (initialMovies.length === 0) return; // Vérification si le tableau est vide
+    
+    const newIndex = index >= initialMovies.length ? 0 : index < 0 ? initialMovies.length - 1 : index;
+    setIndexCarrousel(newIndex);
+    selectMovieById(initialMovies[newIndex]?.id); // Vérification si l'élément existe avant d'accéder à l'id
+  };
   
-  const images = [
-    {
-      uri: 'https://static.posters.cz/image/750/affiches-et-posters/stranger-things-one-sheet-season-2-i67844.jpg',
-      title: 'Stranger Things',
+  const selectMovieById = (id: number) => {
+    const movie = initialMovies.find((movie) => movie.id === id);
+    if (movie) {
+      setSelectedMovie({ id: movie.id, original_title: movie.original_title, poster_path: movie.poster_path });
     }
-  ];
+  };
+
   const [moviesPopular, setMoviesPopular] = useState<any[]>([]);
   const [moviesRated, setMoviesRated] = useState<any[]>([]);
   const [moviesupcoming, setMoviesUpcoming] = useState<any[]>([]);
@@ -59,6 +71,21 @@ const HomeScreen = () => {
       .catch(error => console.error(error));
   };
 
+  const fetchMoviesSelected = () =>{
+    fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}&with_genres=${category}`, options)
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.results) {
+        const selectedMovies = data.results
+          .sort(() => 0.5 - Math.random()) // Mélange aléatoire
+          .slice(0, 5); // Prend les 5 premiers
+
+        setInitialMovies(selectedMovies);
+      }
+    })
+    .catch(error => console.error(error));
+  }
+
   
   useEffect(() => {
       // Récupère les films populaires du moment
@@ -73,6 +100,9 @@ const HomeScreen = () => {
 
       // Récupère les films les mieux notés par les utilisateurs
       fetchMovies('top_rated', setMoviesRated, '&sort_by=vote_average.desc');
+
+      // Récupère les films les mieux notés par les utilisateurs pour le carroussel
+      fetchMoviesSelected();
   }
   , [category]);
 
@@ -112,12 +142,20 @@ const HomeScreen = () => {
   const gradient = gradientColor(isDarkMode);
   
   return (
-    <SafeAreaView style={[styles.page]}>
+    <SafeAreaView style={[styles.page, stylesTheme.backgroundColor]}>
       <ScrollView> 
 
         <View style={[styles.container , stylesTheme.backgroundColor]}>
-          <Image source={images[0]} style={[styles.cover]} />
-
+          {selectedMovie && (
+            <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${selectedMovie.poster_path}` }} style={[styles.cover]} />
+          )}
+            <TouchableOpacity onPress={() => setIndexCarrouselLimit(indexCarrousel - 1)} style={[styles.item, {left: 0, top: '50%', position: 'absolute'}]}>
+              <Icon name="chevron-left" size={50} color='white'/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIndexCarrouselLimit(indexCarrousel + 1)} style={[styles.item, {right: 0, top: '50%', position: 'absolute'}]}>
+              <Icon name="chevron-right" size={50} color='white'/>
+            </TouchableOpacity>
+             
           <View style={[styles.navBar, styles.absolute]} >
             <BlurView
               blurType="light"
@@ -157,6 +195,18 @@ const HomeScreen = () => {
           </View>
         </View>
 
+        <FlatList
+          horizontal
+          data={initialMovies}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => setIndexCarrouselLimit(index)} style={{margin: 4}} >
+              <Icon name="circle" size={10} color={index == indexCarrousel ? '#F2C94C' : 'white'}/>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          style={{flex: 1, alignSelf: 'center', margin: 0, padding: 0}}
+        />
+
         <View style={[styles.content, stylesTheme.backgroundColor]}>
           <CarrouselMovies props={moviesPopular} title='Popular'/>
           <CarrouselMovies props={moviesRated} title='Top Rated'/>     
@@ -178,7 +228,6 @@ const styles = StyleSheet.create({
   content : {
     flex: 1,
     paddingHorizontal: 30,
-    // paddingLeft: 30,
   },
   container: {
     width: '100%',
@@ -220,6 +269,7 @@ const styles = StyleSheet.create({
   cover :{
     width: '100%',
     height: '100%',
+    resizeMode: 'cover',
   },
   absolute:{
     position: 'absolute',
