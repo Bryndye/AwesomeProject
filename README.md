@@ -3,6 +3,12 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 # Awesome Project
 Ceci est un projet d'école utilisant ReactNative en s'appuyant sur ce figma [Movie App mobile](https://www.figma.com/design/RiUFzeuRuGTthn9ptxlXXJ/Movies-mobile-app-home---Light-%26-Dark-(Community)?node-id=201-107&node-type=canvas&t=fu4VidutySngaCNw-0) sur mon année de Master 2 développeur fullstack.
 
+# Mon auto évaluation
+## 14/20
+J'ai la page principale faite qui n'est pas pixel perfect par rapport au figma. J'ai pu ajouter beaucoup de features liées à la page Home mais pas toutes et Search (pas demandé).
+Un projet avec une volonté de bien faire (tard dans le projet) mais il est encore très possible de factoriser le code et une mauvaise utilisation de Ts.
+Ceci est mon premier projet sur React Native et sur Ts.  
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
