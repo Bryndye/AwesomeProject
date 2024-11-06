@@ -74,7 +74,6 @@ const theme = {
   },
   container:{
     flex : 1,
-    // justifyContent: 'center' as 'center',
     alignItems: 'center' as 'center',
   },
   title: {

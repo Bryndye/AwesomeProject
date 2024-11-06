@@ -18,13 +18,8 @@ import Pub from './components/Pub';
 import { useColorScheme } from 'react-native';
 import { getThemeStyles, getStyles, gradientColor } from './styles';
 
-
-const DATA = ['All','Romance','Kids','Sport','Horror'];
-
-type ItemProps = {title: string};
-
 const HomeScreen = () => {
-  const [category, setCategory] = useState('All');
+  const [category, setCategory] = useState(-1);
   
   const images = [
     {
@@ -32,9 +27,9 @@ const HomeScreen = () => {
       title: 'Stranger Things',
     }
   ];
-  const [moviesPopular, setMoviesPopular] = useState([]);
-  const [moviesRated, setMoviesRated] = useState([]);
-  const [moviesupcoming, setMoviesUpcoming] = useState([]);
+  const [moviesPopular, setMoviesPopular] = useState<any[]>([]);
+  const [moviesRated, setMoviesRated] = useState<any[]>([]);
+  const [moviesupcoming, setMoviesUpcoming] = useState<any[]>([]);
 
   // Fetch movies from API and options
   const options = {
@@ -44,42 +39,70 @@ const HomeScreen = () => {
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzZGViNjQ5MmY2ODJkNzBjYTRmNjhhMDQ4OGU4NGY5NCIsIm5iZiI6MTcyODk5OTkxOC42MTMzNTEsInN1YiI6IjY3MGU3MDFlZjU4YTkyMDZhYTQxZWIxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.c-TkXgOvyubf-hEgGVU6Pajj2y4TUa5IjBgG_NnN2fQ'
       }
   };
+
+  const fetchMovies = (type: string, setData: React.Dispatch<React.SetStateAction<any[]>>, param = '') => {
+    let baseUrl = (category !== null && category != -1) ? 'https://api.themoviedb.org/3/discover/movie' : `https://api.themoviedb.org/3/movie/${type}`; 
+    baseUrl = baseUrl + `?api_key=${process.env.API_KEY}`;
+    if(param) {
+      baseUrl = baseUrl + param;
+    }
+
+    const finalUrl = `${baseUrl}&with_genres=${category}`;
+
+    fetch(finalUrl, options)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.results) {
+          setData(data.results);
+        }
+      })
+      .catch(error => console.error(error));
+  };
+
+  
   useEffect(() => {
-      fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}`, options)
-          .then(response => response.json())
-          .then(data =>{ 
-              setMoviesPopular(data.results);
-          })
-          .catch(error => console.error(error));
-      fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}`, options)
-          .then(response => response.json())
-          .then(data =>{ 
-              setMoviesRated(data.results);
-          })
-          .catch(error => console.error(error));
-          
-      fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.API_KEY}`, options)
-          .then(response => response.json())
-          .then(data =>{ 
-            setMoviesUpcoming(data.results);
-          })
-          .catch(error => console.error(error));
+      // Récupère les films populaires du moment
+      fetchMovies('popular', setMoviesPopular);
+
+      // Récupère la date d'aujourd'hui et celle d'un mois plus tard
+      const today = new Date().toISOString().split('T')[0];
+      const nextMonth = new Date();
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      const nextMonthStr = nextMonth.toISOString().split('T')[0];
+      fetchMovies('upcoming', setMoviesUpcoming, `&primary_release_date.gte=${today}&primary_release_date.lte=${nextMonthStr}&sort_by=release_date.asc`);
+
+      // Récupère les films les mieux notés par les utilisateurs
+      fetchMovies('top_rated', setMoviesRated, '&sort_by=vote_average.desc');
+  }
+  , [category]);
+
+  const [genres, setGenres] = React.useState<{ id: number; name: string }[]>([]);
+  useEffect(() => {
+    fetch(`https://api.themoviedb.org/3/genre/movie/list?language=en`, options)
+      .then(res => res.json())
+      .then(res => {
+        res.genres.unshift({id: -1, name: 'All'});
+        const fetchedGenres = res.genres
+          .map((genre: { name: string }) => genre.name);
+        setGenres(res.genres);
+      })
+      .catch(err => console.error(err));
   }
   , []);
 
   // Item navigation
-  const Item = ({title}: ItemProps) => (
+  const Item = ({ name, id }: { name: string; id: number }) => (
     <TouchableOpacity 
       style={[
         styles.item,
-        category === title && styles.activeItem,
+        category === id && styles.activeItem,
       ]} 
-      onPress={() => setCategory(title)}>
+      onPress={() => setCategory(id)}>
 
       <Text style={[
         styles.title,
-        category === title && styles.activeTitle,
-      ]}>{title}</Text>
+        category === id && styles.activeTitle,
+      ]}>{name}</Text>
     </TouchableOpacity>
   );
 
@@ -103,9 +126,9 @@ const HomeScreen = () => {
               style={{height:'100%', width:'100%'}}>
               <FlatList
                 horizontal
-                data={DATA}
-                renderItem={({item}) => <Item title={item} />}
-                keyExtractor={item => item}
+                data={genres}
+                renderItem={({ item }) => <Item name={item.name} id={item.id} />}
+                keyExtractor={item => item.id.toString()}
                 />
             </BlurView>
           </View>

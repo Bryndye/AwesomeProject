@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Button, Text, View, useColorScheme, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getThemeStyles, getStyles } from '../styles';
+import { getThemeStyles, getStyles } from './styles';
 import { Image } from 'react-native-elements';
-import VoteSection from './VoteSection';
+import VoteSection from './components/VoteSection';
 
 export function MovieDetails({ navigation, route }: any) {
     const { item } = route.params;

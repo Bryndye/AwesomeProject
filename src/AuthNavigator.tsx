@@ -16,7 +16,7 @@ import HomeScreen from './Home';
 import SearchScreen from './Search';
 import WhishlistScreen from './Whishlist';
 import ProfileScreen from './Profile';
-import MovieDetails from './components/MovieDetails';
+import MovieDetails from './MovieDetails.tsx';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
