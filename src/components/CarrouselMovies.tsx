@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Image } from 'react-native-elements';
 import { useColorScheme } from 'react-native';
 import { getThemeStyles, getStyles } from '../styles';
+import VoteSectionMini from './VoteSectionMini';
 
 interface CarrouselMovieProps {
     props: any;
@@ -52,6 +53,7 @@ const CarrouselMovies: React.FC<CarrouselMovieProps> = ({ props, title }) => {
                                 source={{ uri: `https://image.tmdb.org/t/p/w400/${item.poster_path}` }}
                                 style={styles_.imageMovie}
                             />
+                            <VoteSectionMini voteAverage={item.vote_average} />
                         </View>
                         <Text style={[styles.titleMovie, stylesTheme.textColor]}>{item.original_title}</Text>
                     </TouchableOpacity>

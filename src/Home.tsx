@@ -103,6 +103,7 @@ const HomeScreen = () => {
 
       // Récupère les films les mieux notés par les utilisateurs pour le carroussel
       fetchMoviesSelected();
+      setIndexCarrouselLimit(0);
   }
   , [category]);
 
@@ -149,12 +150,14 @@ const HomeScreen = () => {
           {selectedMovie && (
             <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${selectedMovie.poster_path}` }} style={[styles.cover]} />
           )}
-            <TouchableOpacity onPress={() => setIndexCarrouselLimit(indexCarrousel - 1)} style={[styles.item, {left: 0, top: '50%', position: 'absolute'}]}>
+
+            {/* Touche permettant de naviguer entre les films du carroussel */}
+            {/* <TouchableOpacity onPress={() => setIndexCarrouselLimit(indexCarrousel - 1)} style={[styles.item, {left: 0, top: '50%', position: 'absolute'}]}>
               <Icon name="chevron-left" size={50} color='white'/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setIndexCarrouselLimit(indexCarrousel + 1)} style={[styles.item, {right: 0, top: '50%', position: 'absolute'}]}>
               <Icon name="chevron-right" size={50} color='white'/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
              
           <View style={[styles.navBar, styles.absolute]} >
             <BlurView
