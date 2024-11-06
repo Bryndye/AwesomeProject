@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Text, View, useColorScheme, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, Text, View, useColorScheme, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getThemeStyles, getStyles } from '../styles';
 import { Image } from 'react-native-elements';
@@ -15,7 +15,7 @@ export function MovieDetails({ navigation, route }: any) {
     const voteAverage: number = item.vote_average;
     const voteCount: number = item.vote_count;
 
-    let genre = '';
+    const [genres, setGenres] = React.useState<string[]>([]);
 
     useEffect(() => {
       const options = {
@@ -29,8 +29,11 @@ export function MovieDetails({ navigation, route }: any) {
       fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
         .then(res => res.json())
         .then(res => {
-          // console.log(res);
-          genre = res.genres.find((genre: any) => genre.id === item.genre_ids[0]).name;
+          const fetchedGenres = res.genres
+            .filter((genres: { id: number }) => item.genre_ids.includes(genres.id))
+            .map((genres: { name: string }) => genres.name);
+
+          setGenres(fetchedGenres);
         })
         .catch(err => console.error(err));
     }
@@ -57,8 +60,16 @@ export function MovieDetails({ navigation, route }: any) {
         <View style={{width:100}}>
           <VoteSection voteAverage={voteAverage} voteCount={voteCount} />
         </View>
-
-        <Text style={[themeStyles.textColor]}>{genre}</Text>
+        <FlatList
+                data={genres}
+                renderItem={({ item }) => (
+                  <Text style={[styles_.badgeLanguage, themeStyles.textColor]}>{item}</Text>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{maxHeight:50}}
+            />
 
         <Text style={[themeStyles.textColor]}>{item.overview}</Text>
       </View>
@@ -66,12 +77,3 @@ export function MovieDetails({ navigation, route }: any) {
 }
 
 export default MovieDetails;
-
-// const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       backgroundColor: '#fff',
-//    }
-// });

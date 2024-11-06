@@ -114,11 +114,14 @@ const theme = {
     display: 'flex' as 'flex',
     flexDirection: 'row' as 'row',
     justifyContent: 'space-around' as 'space-around',
+    gap: 10,
   },
   badgeLanguage:{
     backgroundColor: '#F2C94C',
     borderRadius: 10,
     padding: 5,
+    height: 30,
+    margin: 5,
   },
 };
 
