@@ -29,6 +29,7 @@ const HomeScreen = () => {
     
     const newIndex = index >= initialMovies.length ? 0 : index < 0 ? initialMovies.length - 1 : index;
     setIndexCarrousel(newIndex);
+    console.log('Carroussel index : '+newIndex);
     selectMovieById(initialMovies[newIndex]?.id); // Vérification si l'élément existe avant d'accéder à l'id
   };
   
@@ -72,7 +73,12 @@ const HomeScreen = () => {
   };
 
   const fetchMoviesSelected = () =>{
-    fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}&with_genres=${category}`, options)
+    let finalUrl = '';
+    if (category != -1){
+      finalUrl = `&with_genres=${category}`;
+    }
+
+    fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}${finalUrl}`, options)
     .then(response => response.json())
     .then(data => {
       if (data && data.results) {
@@ -86,24 +92,38 @@ const HomeScreen = () => {
     .catch(error => console.error(error));
   }
 
+ // Supprimez `intervalHandle` et `clearInterval(intervalHandle)` dans `setMovies()`
+  useEffect(() => {
+    if (initialMovies.length > 0) {
+      const intervalHandle = setInterval(() => {
+        setIndexCarrouselLimit(indexCarrousel + 1);
+      }, 2000);
+
+      return () => clearInterval(intervalHandle); // Nettoyage de l'intervalle
+    }
+  }, [initialMovies, indexCarrousel]);
+
+
+  function setMovies(){
+    // Récupère les films populaires du moment
+    fetchMovies('popular', setMoviesPopular);
+  
+    // Récupère la date d'aujourd'hui et celle d'un mois plus tard
+    const today = new Date().toISOString().split('T')[0];
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    const nextMonthStr = nextMonth.toISOString().split('T')[0];
+    fetchMovies('upcoming', setMoviesUpcoming, `&primary_release_date.gte=${today}&primary_release_date.lte=${nextMonthStr}&sort_by=release_date.asc`);
+  
+    // Récupère les films les mieux notés par les utilisateurs
+    fetchMovies('top_rated', setMoviesRated, '&sort_by=vote_average.desc');
+
+    // Récupère les films les mieux notés par les utilisateurs pour le carroussel
+    fetchMoviesSelected();
+  }
   
   useEffect(() => {
-      // Récupère les films populaires du moment
-      fetchMovies('popular', setMoviesPopular);
-
-      // Récupère la date d'aujourd'hui et celle d'un mois plus tard
-      const today = new Date().toISOString().split('T')[0];
-      const nextMonth = new Date();
-      nextMonth.setMonth(nextMonth.getMonth() + 1);
-      const nextMonthStr = nextMonth.toISOString().split('T')[0];
-      fetchMovies('upcoming', setMoviesUpcoming, `&primary_release_date.gte=${today}&primary_release_date.lte=${nextMonthStr}&sort_by=release_date.asc`);
-
-      // Récupère les films les mieux notés par les utilisateurs
-      fetchMovies('top_rated', setMoviesRated, '&sort_by=vote_average.desc');
-
-      // Récupère les films les mieux notés par les utilisateurs pour le carroussel
-      fetchMoviesSelected();
-      setIndexCarrouselLimit(0);
+    setMovies();
   }
   , [category]);
 
@@ -119,6 +139,10 @@ const HomeScreen = () => {
       })
       .catch(err => console.error(err));
       setCategory(-1);
+
+      setIndexCarrouselLimit(0);
+
+      setMovies();
   }
   , []);
 
